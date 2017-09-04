@@ -390,7 +390,7 @@ public class UserVisitSessionAnalyzeSpark {
 	
 	/**
 	 * 对行为数据按session粒度进行聚合
-	 * @param actionRDD 行为数据RDD
+	 * @param sessinoid2actionRDD 行为数据RDD
 	 * @return session粒度聚合数据
 	 */
 	private static JavaPairRDD<String, String> aggregateBySession(
@@ -1144,7 +1144,7 @@ public class UserVisitSessionAnalyzeSpark {
 		// 总共要抽取100个session，先按照天数，进行平分
 		int extractNumberPerDay = 100 / dateHourCountMap.size();
 		
-		// <date,<hour,(3,5,20,102)>>  
+
 		
 		/**
 		 * session随机抽取功能
@@ -1156,6 +1156,7 @@ public class UserVisitSessionAnalyzeSpark {
 		 * 将map做成广播变量
 		 * 
 		 */
+		// <date,<hour,(3,5,20,102)>>
 		Map<String, Map<String, List<Integer>>> dateHourExtractMap = 
 				new HashMap<String, Map<String, List<Integer>>>();
 		
@@ -1213,9 +1214,7 @@ public class UserVisitSessionAnalyzeSpark {
 		 */
 		Map<String, Map<String, IntList>> fastutilDateHourExtractMap = 
 				new HashMap<String, Map<String, IntList>>();
-		
-		
-		
+
 		for(Map.Entry<String, Map<String, List<Integer>>> dateHourExtractEntry : 
 				dateHourExtractMap.entrySet()) {
 			String date = dateHourExtractEntry.getKey();
@@ -1499,8 +1498,8 @@ public class UserVisitSessionAnalyzeSpark {
 	
 	/**
 	 * 获取top10热门品类
-	 * @param filteredSessionid2AggrInfoRDD
-	 * @param sessionid2actionRDD
+	 * @param taskid
+	 * @param sessionid2detailRDD
 	 */
 	private static List<Tuple2<CategorySortKey, String>> getTop10Category(  
 			long taskid,  
