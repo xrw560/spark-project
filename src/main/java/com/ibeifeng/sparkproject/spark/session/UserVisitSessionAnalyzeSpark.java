@@ -137,7 +137,7 @@ public class UserVisitSessionAnalyzeSpark {
 		/**
 		 * actionRDD，就是一个公共RDD
 		 * 第一，要用ationRDD，获取到一个公共的sessionid为key的PairRDD
-		 * 第二，actionRDD，用在了session聚合环节里面
+		 * 第二，actionRDD，用在了session聚合的环节里面
 		 * 
 		 * sessionid为key的PairRDD，是确定了，在后面要多次使用的
 		 * 1、与通过筛选的sessionid进行join，获取通过筛选的session的明细数据
@@ -1553,7 +1553,7 @@ public class UserVisitSessionAnalyzeSpark {
 		
 		/**
 		 * 必须要进行去重
-		 * 如果不去重的话，会出现重复的categoryid，排序会对重复的categoryid已经countInfo进行排序
+		 * 如果不去重的话，会出现重复的categoryid，排序会对重复的categoryid以及countInfo进行排序
 		 * 最后很可能会拿到重复的数据
 		 */
 		categoryidRDD = categoryidRDD.distinct();
@@ -1687,7 +1687,7 @@ public class UserVisitSessionAnalyzeSpark {
 		
 					@Override
 					public Boolean call(Tuple2<String, Row> tuple) throws Exception {
-						Row row = tuple._2;  
+						Row row = tuple._2;
 						return row.get(6) != null ? true : false;
 					}
 					
@@ -2122,7 +2122,7 @@ public class UserVisitSessionAnalyzeSpark {
 							}
 						}
 						
-						// 返回结果，<categoryid,sessionid,count>格式
+						// 返回结果，<categoryid,"sessionid,count">格式
 						List<Tuple2<Long, String>> list = new ArrayList<Tuple2<Long, String>>();
 						
 						for(Map.Entry<Long, Long> categoryCountEntry : categoryCountMap.entrySet()) {
