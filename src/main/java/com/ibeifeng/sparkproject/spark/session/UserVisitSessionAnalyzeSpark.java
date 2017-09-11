@@ -101,6 +101,7 @@ public class UserVisitSessionAnalyzeSpark {
                 .registerKryoClasses(new Class[]{
                         CategorySortKey.class,
                         IntList.class});
+
         SparkUtils.setMaster(conf);
 
         /**
@@ -1249,8 +1250,6 @@ public class UserVisitSessionAnalyzeSpark {
          * 广播变量，很简单
          * 其实就是SparkContext的broadcast()方法，传入你要广播的变量，即可
          */
-
-
         final Broadcast<Map<String, Map<String, IntList>>> dateHourExtractMapBroadcast =
                 sc.broadcast(fastutilDateHourExtractMap);
 
