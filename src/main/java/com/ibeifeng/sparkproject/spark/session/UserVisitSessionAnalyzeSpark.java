@@ -95,8 +95,8 @@ public class UserVisitSessionAnalyzeSpark {
                 .set("spark.shuffle.file.buffer", "64")  //调节map端内存缓冲
                 .set("spark.shuffle.memoryFraction", "0.3")  //reduce端内存占比
                 .set("spark.reducer.maxSizeInFlight", "24") //控制shuffle reduce端缓冲大小以避免OOM
-                .set("spark.shuffle.io.maxRetries", "60")
-                .set("spark.shuffle.io.retryWait", "60")
+                .set("spark.shuffle.io.maxRetries", "60") //shuffle文件拉取的时候尝试次数
+                .set("spark.shuffle.io.retryWait", "60") //每一次重试拉取文件的时间间隔
                 .set("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
                 .registerKryoClasses(new Class[]{
                         CategorySortKey.class,
@@ -1827,7 +1827,7 @@ public class UserVisitSessionAnalyzeSpark {
 //				});
 //		
 //		/**
-//		 * 第四步，最第二轮全局的聚合
+//		 * 第四步，做第二轮全局的聚合
 //		 */
 //		JavaPairRDD<Long, Long> clickCategoryId2CountRDD = restoredRDD.reduceByKey(
 //				
