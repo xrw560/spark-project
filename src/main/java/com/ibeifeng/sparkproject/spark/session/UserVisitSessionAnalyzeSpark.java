@@ -748,7 +748,7 @@ public class UserVisitSessionAnalyzeSpark {
 //					}
 //					
 //				}).join(skewedUserid2infoRDD).mapToPair(
-//						
+//						//去掉userid的前缀
 //						new PairFunction<Tuple2<String,Tuple2<String,Row>>, Long, Tuple2<String, Row>>() {
 //
 //							private static final long serialVersionUID = 1L;
