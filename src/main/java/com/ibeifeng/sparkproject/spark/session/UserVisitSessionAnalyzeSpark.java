@@ -815,7 +815,7 @@ public class UserVisitSessionAnalyzeSpark {
 //						List<Tuple2<String, Row>> list = new ArrayList<Tuple2<String, Row>>();
 //						
 //						for(int i = 0; i < 10; i++) {
-//							list.add(new Tuple2<String, Row>(0 + "_" + tuple._1, tuple._2));
+//							list.add(new Tuple2<String, Row>(i + "_" + tuple._1, tuple._2));
 //						}
 //						
 //						return list;
