@@ -1,0 +1,37 @@
+创建hive表
+
+create table user_visit_action(
+data string,
+user_id bigint,
+session_id string,
+page_id bigint,
+action_time string,
+search_keyword string,
+click_category_id bigint,
+click_product_id bigint,
+order_category_ids string,
+order_product_ids string,
+pay_category_ids string,
+pay_product_ids string
+);
+
+load data local inpath 'usr/local/spark-study/user_visit_action.txt' into table user_visit_action;
+
+select * from user_visit_action limit 10;
+
+中文乱码解决，SecureCRT -> options -> Terminal -> Appearance -> Character encoding:UTF-8
+
+
+create table user_info(
+user_id bigint,
+user_name string,
+name string,
+age int,
+professional string,
+city string,
+sex string
+);
+
+load data local inpath 'usr/local/spark-study/user_info.txt' into table user_info;
+
+select * from user_info limit 10;
