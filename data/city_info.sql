@@ -12,10 +12,6 @@ MySQL - 5.5.20 : Database - spark_project
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-CREATE DATABASE /*!32312 IF NOT EXISTS*/`spark_project` /*!40100 DEFAULT CHARACTER SET utf8 */;
-
-USE `spark_project`;
-
 /*Table structure for table `city_info` */
 
 DROP TABLE IF EXISTS `city_info`;
@@ -28,7 +24,7 @@ CREATE TABLE `city_info` (
 
 /*Data for the table `city_info` */
 
-insert  into `city_info`(`city_id`,`city_name`,`area`) values (0,'北京','华北'),(1,'上海','华东'),(2,'南京','华东'),(3,'广州','华南'),(4,'三亚','华南'),(5,'武汉','华中'),(6,'长沙','华中'),(7,'西安','西北'),(8,'成都','西南'),(9,'哈尔滨','东北');
+insert  into `city_info`(`city_id`,`city_name`,`area`) values (0,'Beijing','China North'),(1,'Shanghai','China East'),(2,'Nanjing','China East'),(3,'Guangzhou','China South'),(4,'Sanya','China South'),(5,'Wuhan','China Middle'),(6,'Changsha','China Middle'),(7,'Xian','West North'),(8,'Chengdu','West South'),(9,'Haerbin','East North');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

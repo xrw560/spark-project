@@ -16,7 +16,7 @@ public class RandomPrefixUDF implements UDF2<String, Integer, String> {
 	@Override
 	public String call(String val, Integer num) throws Exception {
 		Random random = new Random();
-		int randNum = random.nextInt(10);
+		int randNum = random.nextInt(num);
 		return randNum + "_" + val;
 	}
 	

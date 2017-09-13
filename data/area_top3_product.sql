@@ -12,10 +12,6 @@ MySQL - 5.5.20 : Database - spark_project
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-CREATE DATABASE /*!32312 IF NOT EXISTS*/`spark_project` /*!40100 DEFAULT CHARACTER SET utf8 */;
-
-USE `spark_project`;
-
 /*Table structure for table `area_top3_product` */
 
 DROP TABLE IF EXISTS `area_top3_product`;
@@ -25,7 +21,7 @@ CREATE TABLE `area_top3_product` (
   `area` varchar(255) DEFAULT NULL,
   `area_level` varchar(255) DEFAULT NULL,
   `product_id` int(11) DEFAULT NULL,
-  `city_names` varchar(255) DEFAULT NULL,
+  `city_infos` varchar(255) DEFAULT NULL,
   `click_count` int(11) DEFAULT NULL,
   `product_name` varchar(255) DEFAULT NULL,
   `product_status` varchar(255) DEFAULT NULL

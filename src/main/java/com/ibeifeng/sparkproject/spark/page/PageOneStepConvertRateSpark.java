@@ -100,7 +100,9 @@ public class PageOneStepConvertRateSpark {
 				taskParam, pageSplitPvMap, startPagePv);
 		
 		// 持久化页面切片转化率
-		persistConvertRate(taskid, convertRateMap);  
+		persistConvertRate(taskid, convertRateMap);
+
+		sc.close();
 	}
 	
 	/**
