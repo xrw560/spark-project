@@ -69,20 +69,20 @@ public class AdClickRealTimeStatSpark {
 //				.set("spark.streaming.blockInterval", "50");    
 //				.set("spark.streaming.receiver.writeAheadLog.enable", "true");   
 		
-		// spark streaming的上下文是构建JavaStreamingContext对象
+		// Spark streaming的上下文是构建JavaStreamingContext对象
 		// 而不是像之前的JavaSparkContext、SQLContext/HiveContext
-		// 传入的第一个参数，和之前的spark上下文一样，也是SparkConf对象；第二个参数则不太一样
+		// 传入的第一个参数，和之前的Spark上下文一样，也是SparkConf对象；第二个参数则不太一样
 		
-		// 第二个参数是spark streaming类型作业比较有特色的一个参数
+		// 第二个参数是Spark streaming类型作业比较有特色的一个参数
 		// 实时处理batch的interval
-		// spark streaming，每隔一小段时间，会去收集一次数据源（kafka）中的数据，做成一个batch
+		// Spark Streaming，每隔一小段时间，会去收集一次数据源（kafka）中的数据，做成一个batch
 		// 每次都是处理一个batch中的数据
-		
+
 		// 通常来说，batch interval，就是指每隔多少时间收集一次数据源中的数据，然后进行处理
-		// 一遍spark streaming的应用，都是设置数秒到数十秒（很少会超过1分钟）
+		// 一般Spark Streaming的应用，都是设置数秒到数十秒（很少会超过1分钟）
 		
 		// 咱们这里项目中，就设置5秒钟的batch interval
-		// 每隔5秒钟，咱们的spark streaming作业就会收集最近5秒内的数据源接收过来的数据
+		// 每隔5秒钟，咱们的Spark Streaming作业就会收集最近5秒内的数据源接收过来的数据
 		JavaStreamingContext jssc = new JavaStreamingContext(
 				conf, Durations.seconds(5));  
 		jssc.checkpoint("hdfs://192.168.1.105:9000/streaming_checkpoint");
@@ -90,7 +90,7 @@ public class AdClickRealTimeStatSpark {
 		// 正式开始进行代码的编写
 		// 实现咱们需要的实时计算的业务逻辑和功能
 		
-		// 创建针对Kafka数据来源的输入DStream（离线流，代表了一个源源不断的数据来源，抽象）
+		// 创建针对Kafka数据来源的输入DStream（离散流，代表了一个源源不断的数据来源，是一个抽象的概念）
 		// 选用kafka direct api（很多好处，包括自己内部自适应调整每次接收数据量的特性，等等） 
 		
 		// 构建kafka参数map
@@ -118,7 +118,11 @@ public class AdClickRealTimeStatSpark {
 				StringDecoder.class, 
 				kafkaParams, 
 				topics);
-		
+
+		// 一条一条的实时日志
+		// timestamp province city userid adid
+		// 某个时间点 某个省份 某个城市 某个用户 某个广告
+
 //		adRealTimeLogDStream.repartition(1000);
 		
 		// 根据动态黑名单进行数据过滤
@@ -466,7 +470,7 @@ public class AdClickRealTimeStatSpark {
 		// blacklistDStream
 		// 里面的每个batch，其实就是都是过滤出来的已经在某天对某个广告点击量超过100的用户
 		// 遍历这个dstream中的每个rdd，然后将黑名单用户增加到mysql中
-		// 这里一旦增加以后，在整个这段程序的前面，会加上根据黑名单动态过滤用户的逻辑
+		// 这里一旦增加以后，在整个这 的逻辑
 		// 我们可以认为，一旦用户被拉入黑名单之后，以后就不会再出现在这里了
 		// 所以直接插入mysql即可
 		

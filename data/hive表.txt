@@ -1,3 +1,4 @@
+04第四章 页面单跳转化率统计
 创建hive表
 
 create table user_visit_action(
@@ -12,7 +13,8 @@ click_product_id bigint,
 order_category_ids string,
 order_product_ids string,
 pay_category_ids string,
-pay_product_ids string
+pay_product_ids string,
+city_id bigint
 );
 
 load data local inpath 'usr/local/spark-study/user_visit_action.txt' into table user_visit_action;
@@ -35,3 +37,55 @@ sex string
 load data local inpath 'usr/local/spark-study/user_info.txt' into table user_info;
 
 select * from user_info limit 10;
+
+==================================================================================================================================================
+05第五章 各区域热门商品统计
+hive中创建表，加载数据
+
+create table product_info(
+product_id bigint,
+product_name string,
+extend_info string
+);
+
+load data local inpath '/usr/local/spark-study/product_info.txt' into table product_info;
+
+select * from product_info limit 10;
+------------------------------------------------
+
+在mysql中,导入city_info数据
+mysql> source /usr/local/spark-study/city_info.sql
+
+show tables;
+
+select * from city_info;
+
+导入area_top3_product数据
+mysql> source /usr/local/spark-study/area_top3_product.sql
+
+------------------------------------------------
+INSERT INTO task(task_name,task_param) VALUES('test task03','{"startDate":["2017-09-13"],"endDate":["2017-09-13"]}');
+
+select * from task;
+
+------------------------------------------------
+新建脚本文件
+vi spark_product.sh
+/usr/local/spark/bin/spark-submit \
+--class com.ibeifeng.sparkproject.spark.page.AreaTop3ProductSpark \
+--num-executors 1 \
+--driver-memory 100m \
+--executor-memory 100m \
+--executor-cores 1 \
+--files /usr/local/hive/conf/hive-site.xml \
+--driver-class-path /usr/local/hive/lib/mysql-connector-java-5.1.17.jar \
+/usr/local/spark-study/spark-project-0.0.1-SNAPSHOT-jar-with-dependencies.jar \
+${1}
+
+执行脚本文件，7为taskid
+./spark_product.sh 7
+
+
+
+
+

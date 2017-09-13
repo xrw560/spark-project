@@ -263,7 +263,7 @@ public class JDBCHelper {
 			e.printStackTrace();  
 		} finally {
 			if(conn != null) {
-				datasource.push(conn);  
+				datasource.push(conn);   // 用完以后将连接返回给连接池，进行复用
 			}
 		}
 		

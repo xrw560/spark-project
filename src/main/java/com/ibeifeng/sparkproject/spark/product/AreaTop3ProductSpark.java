@@ -47,6 +47,7 @@ public class AreaTop3ProductSpark {
 
 		// 构建Spark上下文
 		JavaSparkContext sc = new JavaSparkContext(conf);
+//		sc.setLogLevel("WARN");
 		SQLContext sqlContext = SparkUtils.getSQLContext(sc.sc());
 //		sqlContext.setConf("spark.sql.shuffle.partitions", "1000"); 
 //		sqlContext.setConf("spark.sql.autoBroadcastJoinThreshold", "20971520");
@@ -399,7 +400,7 @@ public class AreaTop3ProductSpark {
 //					+ "tapcc.click_count,"
 //					+ "tapcc.city_infos,"
 //					+ "pi.product_name,"
-//					+ "if(get_json_object(pi.extend_info,'product_status')=0,'自营商品','第三方商品') product_status "
+//					+ "if(get_json_object(pi.extend_info,'product_status')='0','自营商品','第三方商品') product_status "
 //				+ "FROM ("
 //					+ "SELECT "
 //						+ "area,"
