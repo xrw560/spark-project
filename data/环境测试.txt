@@ -85,6 +85,29 @@ ${1}
 执行脚本文件，7为taskid
 ./spark_product.sh 7
 
+======================================================================================================================================================================
+06第六章 广告点击流量实时统计
+1. 类MockRealTimeData相当于kafka的client，每100ms发一条数据，数据是随机生成的
+
+2. 运行 ad.sql
+
+3. kafka中新建AdRealTimeLog的topic
+
+4. 运行脚本 ./spark_ad.sh 8
+/usr/local/spark/bin/spark-submit \
+--class com.ibeifeng.sparkproject.spark.page.AdClickRealTimeStatSpark \
+--num-executors 1 \
+--driver-memory 100m \
+--executor-memory 100m \
+--executor-cores 1 \
+--files /usr/local/hive/conf/hive-site.xml \
+--driver-class-path /usr/local/hive/lib/mysql-connector-java-5.1.17.jar \
+/usr/local/spark-study/spark-project-0.0.1-SNAPSHOT-jar-with-dependencies.jar \
+${1}
+
+5. 查看表中是否有数据
+
+
 
 
 
