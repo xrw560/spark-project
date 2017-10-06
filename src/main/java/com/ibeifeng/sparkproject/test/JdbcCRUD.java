@@ -20,7 +20,7 @@ import java.sql.Statement;
  * 
  * 但是在本套系类课程中，是不会使用这些开源框架来操作数据库的，而只会使用JDBC
  * 因为直接用JDBC最简单，也最基础，不需要其他技术的基础
- * 主要同学们有基本的java编程基础、最最基础的hadoop基础知识，以及扎实的Spark技术功底
+ * 只要同学们有基本的java编程基础、最最基础的hadoop基础知识，以及扎实的Spark技术功底
  * 我们就要保证同学们就可以学习这套高端、负责的Spark大型大数据项目实战课程
  * 
  * @author Administrator
