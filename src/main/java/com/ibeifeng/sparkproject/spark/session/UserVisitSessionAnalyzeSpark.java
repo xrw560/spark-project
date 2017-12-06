@@ -98,9 +98,7 @@ public class UserVisitSessionAnalyzeSpark {
                 .set("spark.shuffle.io.maxRetries", "60") //shuffle文件拉取的时候尝试次数
                 .set("spark.shuffle.io.retryWait", "60") //每一次重试拉取文件的时间间隔
                 .set("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
-                .registerKryoClasses(new Class[]{
-                        CategorySortKey.class,
-                        IntList.class});
+                .registerKryoClasses(new Class[]{CategorySortKey.class, IntList.class});
 
         SparkUtils.setMaster(conf);
 
@@ -210,9 +208,7 @@ public class UserVisitSessionAnalyzeSpark {
          *
          * 计算出来的结果，在J2EE中，是怎么显示的，是用两张柱状图显示
          */
-
-        randomExtractSession(sc, task.getTaskid(),
-                filteredSessionid2AggrInfoRDD, sessionid2detailRDD);
+        randomExtractSession(sc, task.getTaskid(), filteredSessionid2AggrInfoRDD, sessionid2detailRDD);
 
         /**
          * 特别说明
@@ -223,8 +219,7 @@ public class UserVisitSessionAnalyzeSpark {
          */
 
         // 计算出各个范围的session占比，并写入MySQL
-        calculateAndPersistAggrStat(sessionAggrStatAccumulator.value(),
-                task.getTaskid());
+        calculateAndPersistAggrStat(sessionAggrStatAccumulator.value(), task.getTaskid());
 
         /**
          * session聚合统计（统计出访问时长和访问步长，各个区间的session数量占总session数量的比例）
@@ -279,12 +274,10 @@ public class UserVisitSessionAnalyzeSpark {
          */
 
         // 获取top10热门品类
-        List<Tuple2<CategorySortKey, String>> top10CategoryList =
-                getTop10Category(task.getTaskid(), sessionid2detailRDD);
+        List<Tuple2<CategorySortKey, String>> top10CategoryList = getTop10Category(task.getTaskid(), sessionid2detailRDD);
 
         // 获取top10活跃session
-        getTop10Session(sc, task.getTaskid(),
-                top10CategoryList, sessionid2detailRDD);
+        getTop10Session(sc, task.getTaskid(), top10CategoryList, sessionid2detailRDD);
 
         // 关闭Spark上下文
         sc.close();
@@ -443,7 +436,7 @@ public class UserVisitSessionAnalyzeSpark {
                             Long clickCategoryId = row.getLong(6);
 
                             // 实际上这里要对数据说明一下
-                            // 并不是每一行访问行为都有searchKeyword何clickCategoryId两个字段的
+                            // 并不是每一行访问行为都有searchKeyword 和 clickCategoryId两个字段的
                             // 其实，只有搜索行为，是有searchKeyword字段的
                             // 只有点击品类的行为，是有clickCategoryId字段的
                             // 所以，任何一行行为数据，都不可能两个字段都有，所以数据是可能出现null值的
@@ -458,8 +451,7 @@ public class UserVisitSessionAnalyzeSpark {
                                 }
                             }
                             if (clickCategoryId != null) {
-                                if (!clickCategoryIdsBuffer.toString().contains(
-                                        String.valueOf(clickCategoryId))) {
+                                if (!clickCategoryIdsBuffer.toString().contains(String.valueOf(clickCategoryId))) {
                                     clickCategoryIdsBuffer.append(clickCategoryId + ",");
                                 }
                             }
@@ -878,9 +870,6 @@ public class UserVisitSessionAnalyzeSpark {
 
     /**
      * 过滤session数据，并进行聚合统计
-     *
-     * @param sessionid2AggrInfoRDD
-     * @return
      */
     private static JavaPairRDD<String, String> filterSessionAndAggrStat(
             JavaPairRDD<String, String> sessionid2AggrInfoRDD,
@@ -991,7 +980,6 @@ public class UserVisitSessionAnalyzeSpark {
 
                     /**
                      * 计算访问时长范围
-                     * @param visitLength
                      */
                     private void calculateVisitLength(long visitLength) {
                         if (visitLength >= 1 && visitLength <= 3) {
@@ -1165,8 +1153,7 @@ public class UserVisitSessionAnalyzeSpark {
          *
          */
         // <date,<hour,(3,5,20,102)>>
-        Map<String, Map<String, List<Integer>>> dateHourExtractMap =
-                new HashMap<String, Map<String, List<Integer>>>();
+        Map<String, Map<String, List<Integer>>> dateHourExtractMap = new HashMap<String, Map<String, List<Integer>>>();
 
         Random random = new Random();
 
@@ -1220,11 +1207,9 @@ public class UserVisitSessionAnalyzeSpark {
         /**
          * fastutil的使用，很简单，比如List<Integer>的list，对应到fastutil，就是IntList
          */
-        Map<String, Map<String, IntList>> fastutilDateHourExtractMap =
-                new HashMap<String, Map<String, IntList>>();
+        Map<String, Map<String, IntList>> fastutilDateHourExtractMap = new HashMap<String, Map<String, IntList>>();
 
-        for (Map.Entry<String, Map<String, List<Integer>>> dateHourExtractEntry :
-                dateHourExtractMap.entrySet()) {
+        for (Map.Entry<String, Map<String, List<Integer>>> dateHourExtractEntry : dateHourExtractMap.entrySet()) {
             String date = dateHourExtractEntry.getKey();
             Map<String, List<Integer>> hourExtractMap = dateHourExtractEntry.getValue();
 
@@ -1276,8 +1261,7 @@ public class UserVisitSessionAnalyzeSpark {
                     public Iterable<Tuple2<String, String>> call(
                             Tuple2<String, Iterable<String>> tuple)
                             throws Exception {
-                        List<Tuple2<String, String>> extractSessionids =
-                                new ArrayList<Tuple2<String, String>>();
+                        List<Tuple2<String, String>> extractSessionids = new ArrayList<Tuple2<String, String>>();
 
                         String dateHour = tuple._1;
                         String date = dateHour.split("_")[0];
@@ -1289,12 +1273,10 @@ public class UserVisitSessionAnalyzeSpark {
                          * 直接调用广播变量（Broadcast类型）的value() / getValue()
                          * 可以获取到之前封装的广播变量
                          */
-                        Map<String, Map<String, IntList>> dateHourExtractMap =
-                                dateHourExtractMapBroadcast.value();
+                        Map<String, Map<String, IntList>> dateHourExtractMap = dateHourExtractMapBroadcast.value();
                         List<Integer> extractIndexList = dateHourExtractMap.get(date).get(hour);
 
-                        ISessionRandomExtractDAO sessionRandomExtractDAO =
-                                DAOFactory.getSessionRandomExtractDAO();
+                        ISessionRandomExtractDAO sessionRandomExtractDAO = DAOFactory.getSessionRandomExtractDAO();
 
                         int index = 0;
                         while (iterator.hasNext()) {
@@ -1332,8 +1314,7 @@ public class UserVisitSessionAnalyzeSpark {
         /**
          * 第四步：获取抽取出来的session的明细数据
          */
-        JavaPairRDD<String, Tuple2<String, Row>> extractSessionDetailRDD =
-                extractSessionidsRDD.join(sessionid2actionRDD);
+        JavaPairRDD<String, Tuple2<String, Row>> extractSessionDetailRDD = extractSessionidsRDD.join(sessionid2actionRDD);
 
 //		extractSessionDetailRDD.foreach(new VoidFunction<Tuple2<String,Tuple2<String,Row>>>() {  
 //			
@@ -1505,13 +1486,21 @@ public class UserVisitSessionAnalyzeSpark {
 
     /**
      * 获取top10热门品类
-     *
-     * @param taskid
-     * @param sessionid2detailRDD
+     * <p>
+     * 实现思路分析：
+     * <p>
+     * 1、拿到通过筛选条件的那批session，访问过的所有品类
+     * 2、计算出session访问过的所有品类的点击、下单和支付次数，这里可能要跟第一步计算出来的品类进行join
+     * 3、自己开发二次排序的key
+     * 4、做映射，将品类的点击、下单和支付次数，封装到二次排序key中，作为PairRDD的key
+     * 5、使用sortByKey(false)，按照自定义key，进行降序二次排序
+     * 6、使用take(10)获取，排序后的前10个品类，就是top10热门品类
+     * 7、将top10热门品类，以及每个品类的点击、下单和支付次数，写入MySQL数据库
+     * 8、本地测试
+     * 9、使用Scala来开发二次排序key
      */
     private static List<Tuple2<CategorySortKey, String>> getTop10Category(
-            long taskid,
-            JavaPairRDD<String, Row> sessionid2detailRDD) {
+            long taskid, JavaPairRDD<String, Row> sessionid2detailRDD) {
         /**
          * 第一步：获取符合条件的session访问过的所有品类
          */
@@ -1633,8 +1622,7 @@ public class UserVisitSessionAnalyzeSpark {
 
                 });
 
-        JavaPairRDD<CategorySortKey, String> sortedCategoryCountRDD =
-                sortKey2countRDD.sortByKey(false);
+        JavaPairRDD<CategorySortKey, String> sortedCategoryCountRDD = sortKey2countRDD.sortByKey(false);
 
         /**
          * 第六步：用take(10)取出top10热门品类，并写入MySQL
@@ -2085,8 +2073,7 @@ public class UserVisitSessionAnalyzeSpark {
         /**
          * 第一步：将top10热门品类的id，生成一份RDD
          */
-        List<Tuple2<Long, Long>> top10CategoryIdList =
-                new ArrayList<Tuple2<Long, Long>>();
+        List<Tuple2<Long, Long>> top10CategoryIdList = new ArrayList<Tuple2<Long, Long>>();
 
         for (Tuple2<CategorySortKey, String> category : top10CategoryList) {
             long categoryid = Long.valueOf(StringUtils.getFieldFromConcatString(
@@ -2094,14 +2081,12 @@ public class UserVisitSessionAnalyzeSpark {
             top10CategoryIdList.add(new Tuple2<Long, Long>(categoryid, categoryid));
         }
 
-        JavaPairRDD<Long, Long> top10CategoryIdRDD =
-                sc.parallelizePairs(top10CategoryIdList);
+        JavaPairRDD<Long, Long> top10CategoryIdRDD = sc.parallelizePairs(top10CategoryIdList);
 
         /**
          * 第二步：计算top10品类被各session点击的次数
          */
-        JavaPairRDD<String, Iterable<Row>> sessionid2detailsRDD =
-                sessionid2detailRDD.groupByKey();
+        JavaPairRDD<String, Iterable<Row>> sessionid2detailsRDD = sessionid2detailRDD.groupByKey();
 
         JavaPairRDD<Long, String> categoryid2sessionCountRDD = sessionid2detailsRDD.flatMapToPair(
 
@@ -2169,8 +2154,7 @@ public class UserVisitSessionAnalyzeSpark {
         /**
          * 第三步：分组取TopN算法实现，获取每个品类的top10活跃用户
          */
-        JavaPairRDD<Long, Iterable<String>> top10CategorySessionCountsRDD =
-                top10CategorySessionCountRDD.groupByKey();
+        JavaPairRDD<Long, Iterable<String>> top10CategorySessionCountsRDD = top10CategorySessionCountRDD.groupByKey();
 
         JavaPairRDD<String, String> top10SessionRDD = top10CategorySessionCountsRDD.flatMapToPair(
 

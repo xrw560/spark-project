@@ -264,7 +264,7 @@ public class JdbcCRUD {
 					"root", 
 					"root");  
 			
-			// 第一个，SQL语句中，值所在的地方，都用问好代表
+			// 第一个，SQL语句中，值所在的地方，都用问号代表
 			String sql = "insert into test_user(name,age) values(?,?)";
 			
 			pstmt = conn.prepareStatement(sql);

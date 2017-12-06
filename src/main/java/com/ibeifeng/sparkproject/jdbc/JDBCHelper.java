@@ -50,7 +50,7 @@ public class JDBCHelper {
     }
 
     // 第二步，实现JDBCHelper的单例化
-    // 为什么要实现代理化呢？因为它的内部要封装一个简单的内部的数据库连接池
+    // 为什么要实现单例化呢？因为它的内部要封装一个简单的内部的数据库连接池
     // 为了保证数据库连接池有且仅有一份，所以就通过单例的方式
     // 保证JDBCHelper只有一个实例，实例中只有一份数据库连接池
     private static JDBCHelper instance = null;
