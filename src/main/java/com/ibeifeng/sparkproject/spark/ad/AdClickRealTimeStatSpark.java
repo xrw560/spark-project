@@ -124,8 +124,7 @@ public class AdClickRealTimeStatSpark {
 //		adRealTimeLogDStream.repartition(1000);
 
         // 根据动态黑名单进行数据过滤
-        JavaPairDStream<String, String> filteredAdRealTimeLogDStream =
-                filterByBlacklist(adRealTimeLogDStream);
+        JavaPairDStream<String, String> filteredAdRealTimeLogDStream = filterByBlacklist(adRealTimeLogDStream);
 
         // 生成动态黑名单
         generateDynamicBlacklist(filteredAdRealTimeLogDStream);

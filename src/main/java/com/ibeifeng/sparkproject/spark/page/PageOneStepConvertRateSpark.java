@@ -85,8 +85,7 @@ public class PageOneStepConvertRateSpark {
         JavaPairRDD<String, Iterable<Row>> sessionid2actionsRDD = sessionid2actionRDD.groupByKey();
 
         // 最核心的一步，每个session的单跳页面切片的生成，以及页面流的匹配，算法
-        JavaPairRDD<String, Integer> pageSplitRDD = generateAndMatchPageSplit(
-                sc, sessionid2actionsRDD, taskParam);
+        JavaPairRDD<String, Integer> pageSplitRDD = generateAndMatchPageSplit(sc, sessionid2actionsRDD, taskParam);
         Map<String, Object> pageSplitPvMap = pageSplitRDD.countByKey();
 
         // 使用者指定的页面流是3,2,5,8,6
@@ -94,8 +93,7 @@ public class PageOneStepConvertRateSpark {
         long startPagePv = getStartPagePv(taskParam, sessionid2actionsRDD);
 
         // 计算目标页面流的各个页面切片的转化率
-        Map<String, Double> convertRateMap = computePageSplitConvertRate(
-                taskParam, pageSplitPvMap, startPagePv);
+        Map<String, Double> convertRateMap = computePageSplitConvertRate(taskParam, pageSplitPvMap, startPagePv);
 
         // 持久化页面切片转化率
         persistConvertRate(taskid, convertRateMap);
@@ -146,8 +144,7 @@ public class PageOneStepConvertRateSpark {
                     private static final long serialVersionUID = 1L;
 
                     @Override
-                    public Iterable<Tuple2<String, Integer>> call(
-                            Tuple2<String, Iterable<Row>> tuple)
+                    public Iterable<Tuple2<String, Integer>> call(Tuple2<String, Iterable<Row>> tuple)
                             throws Exception {
                         // 定义返回list
                         List<Tuple2<String, Integer>> list = new ArrayList<Tuple2<String, Integer>>();
@@ -235,10 +232,8 @@ public class PageOneStepConvertRateSpark {
      * @param sessionid2actionsRDD
      * @return
      */
-    private static long getStartPagePv(JSONObject taskParam,
-                                       JavaPairRDD<String, Iterable<Row>> sessionid2actionsRDD) {
-        String targetPageFlow = ParamUtils.getParam(taskParam,
-                Constants.PARAM_TARGET_PAGE_FLOW);
+    private static long getStartPagePv(JSONObject taskParam, JavaPairRDD<String, Iterable<Row>> sessionid2actionsRDD) {
+        String targetPageFlow = ParamUtils.getParam(taskParam, Constants.PARAM_TARGET_PAGE_FLOW);
         final long startPageId = Long.valueOf(targetPageFlow.split(",")[0]);
 
         JavaRDD<Long> startPageRDD = sessionid2actionsRDD.flatMap(
@@ -248,8 +243,7 @@ public class PageOneStepConvertRateSpark {
                     private static final long serialVersionUID = 1L;
 
                     @Override
-                    public Iterable<Long> call(
-                            Tuple2<String, Iterable<Row>> tuple)
+                    public Iterable<Long> call(Tuple2<String, Iterable<Row>> tuple)
                             throws Exception {
                         List<Long> list = new ArrayList<Long>();
 
@@ -280,13 +274,10 @@ public class PageOneStepConvertRateSpark {
      * @return
      */
     private static Map<String, Double> computePageSplitConvertRate(
-            JSONObject taskParam,
-            Map<String, Object> pageSplitPvMap,
-            long startPagePv) {
+            JSONObject taskParam, Map<String, Object> pageSplitPvMap, long startPagePv) {
         Map<String, Double> convertRateMap = new HashMap<String, Double>();
 
-        String[] targetPages = ParamUtils.getParam(taskParam,
-                Constants.PARAM_TARGET_PAGE_FLOW).split(",");
+        String[] targetPages = ParamUtils.getParam(taskParam, Constants.PARAM_TARGET_PAGE_FLOW).split(",");
 
         long lastPageSplitPv = 0L;
 
@@ -298,17 +289,14 @@ public class PageOneStepConvertRateSpark {
         // 通过for循环，获取目标页面流中的各个页面切片（pv）
         for (int i = 1; i < targetPages.length; i++) {
             String targetPageSplit = targetPages[i - 1] + "_" + targetPages[i];
-            long targetPageSplitPv = Long.valueOf(String.valueOf(
-                    pageSplitPvMap.get(targetPageSplit)));
+            long targetPageSplitPv = Long.valueOf(String.valueOf(pageSplitPvMap.get(targetPageSplit)));
 
             double convertRate = 0.0;
 
             if (i == 1) {
-                convertRate = NumberUtils.formatDouble(
-                        (double) targetPageSplitPv / (double) startPagePv, 2);
+                convertRate = NumberUtils.formatDouble((double) targetPageSplitPv / (double) startPagePv, 2);
             } else {
-                convertRate = NumberUtils.formatDouble(
-                        (double) targetPageSplitPv / (double) lastPageSplitPv, 2);
+                convertRate = NumberUtils.formatDouble((double) targetPageSplitPv / (double) lastPageSplitPv, 2);
             }
 
             convertRateMap.put(targetPageSplit, convertRate);
@@ -324,8 +312,7 @@ public class PageOneStepConvertRateSpark {
      *
      * @param convertRateMap
      */
-    private static void persistConvertRate(long taskid,
-                                           Map<String, Double> convertRateMap) {
+    private static void persistConvertRate(long taskid, Map<String, Double> convertRateMap) {
         StringBuffer buffer = new StringBuffer("");
 
         for (Map.Entry<String, Double> convertRateEntry : convertRateMap.entrySet()) {
