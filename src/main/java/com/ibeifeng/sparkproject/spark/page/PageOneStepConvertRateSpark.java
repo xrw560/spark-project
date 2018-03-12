@@ -77,7 +77,7 @@ public class PageOneStepConvertRateSpark {
         // 当然不行
         // 所以说呢，页面切片的生成，肯定是要基于用户session粒度的
 
-        JavaPairRDD<String, Row> sessionid2actionRDD = getSessionid2actionRDD(actionRDD);
+        JavaPairRDD<String, Row> sessionid2actionRDD = getSessionid2actionRDD(actionRDD);//<sessionid,用户访问行为>
         sessionid2actionRDD = sessionid2actionRDD.cache(); // persist(StorageLevel.MEMORY_ONLY)
 
         // 对<sessionid,访问行为> RDD，做一次groupByKey操作
@@ -107,10 +107,8 @@ public class PageOneStepConvertRateSpark {
      * @param actionRDD 用户访问行为RDD
      * @return <sessionid,用户访问行为>格式的数据
      */
-    private static JavaPairRDD<String, Row> getSessionid2actionRDD(
-            JavaRDD<Row> actionRDD) {
+    private static JavaPairRDD<String, Row> getSessionid2actionRDD(JavaRDD<Row> actionRDD) {
         return actionRDD.mapToPair(new PairFunction<Row, String, Row>() {
-
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -144,8 +142,7 @@ public class PageOneStepConvertRateSpark {
                     private static final long serialVersionUID = 1L;
 
                     @Override
-                    public Iterable<Tuple2<String, Integer>> call(Tuple2<String, Iterable<Row>> tuple)
-                            throws Exception {
+                    public Iterable<Tuple2<String, Integer>> call(Tuple2<String, Iterable<Row>> tuple) throws Exception {
                         // 定义返回list
                         List<Tuple2<String, Integer>> list = new ArrayList<Tuple2<String, Integer>>();
                         // 获取到当前session的访问行为的迭代器
@@ -239,12 +236,10 @@ public class PageOneStepConvertRateSpark {
         JavaRDD<Long> startPageRDD = sessionid2actionsRDD.flatMap(
 
                 new FlatMapFunction<Tuple2<String, Iterable<Row>>, Long>() {
-
                     private static final long serialVersionUID = 1L;
 
                     @Override
-                    public Iterable<Long> call(Tuple2<String, Iterable<Row>> tuple)
-                            throws Exception {
+                    public Iterable<Long> call(Tuple2<String, Iterable<Row>> tuple) throws Exception {
                         List<Long> list = new ArrayList<Long>();
 
                         Iterator<Row> iterator = tuple._2.iterator();

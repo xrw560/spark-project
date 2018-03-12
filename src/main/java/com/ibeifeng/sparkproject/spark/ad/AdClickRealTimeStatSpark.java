@@ -212,7 +212,7 @@ public class AdClickRealTimeStatSpark {
      */
     private static JavaPairDStream<String, String> filterByBlacklist(
             JavaPairInputDStream<String, String> adRealTimeLogDStream) {
-        // 刚刚接受到原始的用户点击行为日志之后
+        // 刚刚接收到原始的用户点击行为日志之后
         // 根据mysql中的动态黑名单，进行实时的黑名单过滤（黑名单用户的点击行为，直接过滤掉，不要了）
         // 使用transform算子（将dstream中的每个batch RDD进行处理，转换为任意的其他RDD，功能很强大）
 
@@ -558,13 +558,13 @@ public class AdClickRealTimeStatSpark {
 
                         // 动态黑名单机制，就完成了
 
-                        // 第一套spark课程，spark streaming阶段，有个小案例，也是黑名单
+                        // 第一套spark课程，Spark streaming阶段，有个小案例，也是黑名单
                         // 但是那只是从实际项目中抽取出来的案例而已
                         // 作为技术的学习，（案例），包装（基于你公司的一些业务），项目，找工作
-                        // 锻炼和实战自己spark技术，没问题的
+                        // 锻炼和实战自己Spark技术，没问题的
                         // 但是，那还不是真真正正的项目
 
-                        // 第一个spark课程：scala、spark core、源码、调优、spark sql、spark streaming
+                        // 第一个Spark课程：scala、spark core、源码、调优、spark sql、spark streaming
                         // 总共加起来（scala+spark）的案例，将近上百个
                         // 搞通透，精通以后，1~2年spark相关经验，没问题
 
@@ -624,10 +624,10 @@ public class AdClickRealTimeStatSpark {
 
         // date province city userid adid
         // date_province_city_adid，作为key；1作为value
-        // 通过spark，直接统计出来全局的点击次数，在spark集群中保留一份；在mysql中，也保留一份
+        // 通过Spark，直接统计出来全局的点击次数，在Spark集群中保留一份；在mysql中，也保留一份
         // 我们要对原始数据进行map，映射成<date_province_city_adid,1>格式
         // 然后呢，对上述格式的数据，执行updateStateByKey算子
-        // spark streaming特有的一种算子，在spark集群内存中，维护一份key的全局状态
+        // Spark streaming特有的一种算子，在Spark集群内存中，维护一份key的全局状态
         JavaPairDStream<String, Long> mappedDStream = filteredAdRealTimeLogDStream.mapToPair(
 
                 new PairFunction<Tuple2<String, String>, String, Long>() {
@@ -656,7 +656,7 @@ public class AdClickRealTimeStatSpark {
                 });
 
         // 在这个dstream中，就相当于，有每个batch rdd累加的各个key（各天各省份各城市各广告的点击次数）
-        // 每次计算出最新的值，就在aggregatedDStream中的每个batch rdd中反应出来
+        // 每次计算出最新的值，就在aggregatedDStream中的每个batch rdd中反映出来
         JavaPairDStream<String, Long> aggregatedDStream = mappedDStream.updateStateByKey(
 
                 new Function2<List<Long>, Optional<Long>, Optional<Long>>() {
@@ -691,7 +691,7 @@ public class AdClickRealTimeStatSpark {
 
                 });
 
-        // 将计算出来的最新结果，同步一份到mysql中，以便于j2ee系统使用
+        // 将计算出来的最新结果，同步一份到mysql中，以便于J2EE系统使用
         aggregatedDStream.foreachRDD(new Function<JavaPairRDD<String, Long>, Void>() {
 
             private static final long serialVersionUID = 1L;
