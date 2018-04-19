@@ -1117,8 +1117,7 @@ public class UserVisitSessionAnalyzeSpark {
          */
 
         // 将<yyyy-MM-dd_HH,count>格式的map，转换成<yyyy-MM-dd,<HH,count>>的格式
-        Map<String, Map<String, Long>> dateHourCountMap =
-                new HashMap<String, Map<String, Long>>();
+        Map<String, Map<String, Long>> dateHourCountMap = new HashMap<String, Map<String, Long>>();
 
         for (Map.Entry<String, Object> countEntry : countMap.entrySet()) {
             String dateHour = countEntry.getKey();

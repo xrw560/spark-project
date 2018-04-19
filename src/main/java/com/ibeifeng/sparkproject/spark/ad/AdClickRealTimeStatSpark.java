@@ -693,16 +693,11 @@ public class AdClickRealTimeStatSpark {
 
         // 将计算出来的最新结果，同步一份到mysql中，以便于J2EE系统使用
         aggregatedDStream.foreachRDD(new Function<JavaPairRDD<String, Long>, Void>() {
-
             private static final long serialVersionUID = 1L;
-
             @Override
             public Void call(JavaPairRDD<String, Long> rdd) throws Exception {
-
                 rdd.foreachPartition(new VoidFunction<Iterator<Tuple2<String, Long>>>() {
-
                     private static final long serialVersionUID = 1L;
-
                     @Override
                     public void call(Iterator<Tuple2<String, Long>> iterator)
                             throws Exception {
@@ -754,11 +749,8 @@ public class AdClickRealTimeStatSpark {
         // 每一个batch rdd，都代表了最新的全量的每天各省份各城市各广告的点击量
 
         JavaDStream<Row> rowsDStream = adRealTimeStatDStream.transform(
-
                 new Function<JavaPairRDD<String, Long>, JavaRDD<Row>>() {
-
                     private static final long serialVersionUID = 1L;
-
                     @Override
                     public JavaRDD<Row> call(JavaPairRDD<String, Long> rdd)
                             throws Exception {
@@ -769,11 +761,8 @@ public class AdClickRealTimeStatSpark {
                         // 计算出每天各省份各广告的点击量
 
                         JavaPairRDD<String, Long> mappedRDD = rdd.mapToPair(
-
                                 new PairFunction<Tuple2<String, Long>, String, Long>() {
-
                                     private static final long serialVersionUID = 1L;
-
                                     @Override
                                     public Tuple2<String, Long> call(
                                             Tuple2<String, Long> tuple) throws Exception {
@@ -787,21 +776,15 @@ public class AdClickRealTimeStatSpark {
 
                                         return new Tuple2<String, Long>(key, clickCount);
                                     }
-
                                 });
 
                         JavaPairRDD<String, Long> dailyAdClickCountByProvinceRDD = mappedRDD.reduceByKey(
-
                                 new Function2<Long, Long, Long>() {
-
                                     private static final long serialVersionUID = 1L;
-
                                     @Override
-                                    public Long call(Long v1, Long v2)
-                                            throws Exception {
+                                    public Long call(Long v1, Long v2) throws Exception {
                                         return v1 + v2;
                                     }
-
                                 });
 
                         // 将dailyAdClickCountByProvinceRDD转换为DataFrame
@@ -809,11 +792,8 @@ public class AdClickRealTimeStatSpark {
                         // 使用Spark SQL，通过开窗函数，获取到各省份的top3热门广告
 
                         JavaRDD<Row> rowsRDD = dailyAdClickCountByProvinceRDD.map(
-
                                 new Function<Tuple2<String, Long>, Row>() {
-
                                     private static final long serialVersionUID = 1L;
-
                                     @Override
                                     public Row call(Tuple2<String, Long> tuple)
                                             throws Exception {
@@ -1008,7 +988,6 @@ public class AdClickRealTimeStatSpark {
                     }
 
                 });
-
                 return null;
             }
 
