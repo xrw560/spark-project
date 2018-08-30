@@ -52,17 +52,14 @@ public class ValidUtils {
      * @param paramField 参数字段
      * @return 校验结果
      */
-    public static boolean in(String data, String dataField,
-                             String parameter, String paramField) {
-        String paramFieldValue = StringUtils.getFieldFromConcatString(
-                parameter, "\\|", paramField);
+    public static boolean in(String data, String dataField, String parameter, String paramField) {
+        String paramFieldValue = StringUtils.getFieldFromConcatString(parameter, "\\|", paramField);
         if (paramFieldValue == null) {
             return true;
         }
         String[] paramFieldValueSplited = paramFieldValue.split(",");
 
-        String dataFieldValue = StringUtils.getFieldFromConcatString(
-                data, "\\|", dataField);
+        String dataFieldValue = StringUtils.getFieldFromConcatString(data, "\\|", dataField);
         if (dataFieldValue != null) {
             String[] dataFieldValueSplited = dataFieldValue.split(",");
 
@@ -87,16 +84,13 @@ public class ValidUtils {
      * @param paramField 参数字段
      * @return 校验结果
      */
-    public static boolean equal(String data, String dataField,
-                                String parameter, String paramField) {
-        String paramFieldValue = StringUtils.getFieldFromConcatString(
-                parameter, "\\|", paramField);
+    public static boolean equal(String data, String dataField, String parameter, String paramField) {
+        String paramFieldValue = StringUtils.getFieldFromConcatString(parameter, "\\|", paramField);
         if (paramFieldValue == null) {
             return true;
         }
 
-        String dataFieldValue = StringUtils.getFieldFromConcatString(
-                data, "\\|", dataField);
+        String dataFieldValue = StringUtils.getFieldFromConcatString(data, "\\|", dataField);
         if (dataFieldValue != null) {
             if (dataFieldValue.equals(paramFieldValue)) {
                 return true;

@@ -105,7 +105,7 @@ public class DateUtils {
 	 */
 	public static String getYesterdayDate() {
 		Calendar cal = Calendar.getInstance();
-		cal.setTime(new Date());  
+		cal.setTime(new Date());
 		cal.add(Calendar.DAY_OF_YEAR, -1);  
 		
 		Date date = cal.getTime();
