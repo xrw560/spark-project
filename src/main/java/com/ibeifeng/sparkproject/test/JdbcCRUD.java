@@ -50,14 +50,14 @@ public class JdbcCRUD {
 		
 		// 定义数据库连接对象
 		// 引用JDBC相关的所有接口或者是抽象类的时候，必须是引用java.sql包下的
-		// java.sql包下的，才代表了java提供的JDBC接口，只是一套规范
+		// java.sql包下的，才代表了java提供的JDBC接口，这是一套规范
 		// 至于具体的实现，则由数据库驱动来提供，切记不要引用诸如com.mysql.jdbc包的类
 		Connection conn = null;
 		
 		// 定义SQL语句执行句柄：Statement对象
 		// Statement对象，其实就是底层会基于Connection数据库连接
 		// 可以让我们方便的针对数据库中的表，执行增删改查的SQL语句
-		// 比如insert、udpate、delete和select语句
+		// 比如insert、update、delete和select语句
 		Statement stmt = null;
 		
 		try {

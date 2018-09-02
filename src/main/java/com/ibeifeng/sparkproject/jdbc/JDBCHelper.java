@@ -182,8 +182,7 @@ public class JDBCHelper {
      * @param params
      * @param callback
      */
-    public void executeQuery(String sql, Object[] params,
-                             QueryCallback callback) {
+    public void executeQuery(String sql, Object[] params, QueryCallback callback) {
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -216,9 +215,9 @@ public class JDBCHelper {
      * 批量执行SQL语句，是JDBC中的一个高级功能
      * 默认情况下，每次执行一条SQL语句，就会通过网络连接，向MySQL发送一次请求
      * <p>
-     * 但是，如果在短时间内要执行多条结构完全一模一样的SQL，只是参数不同
-     * 虽然使用PreparedStatement这种方式，可以只编译一次SQL，提高性能，但是，还是对于每次SQL
-     * 都要向MySQL发送一次网络请求
+     * 但是，如果在短时间内要执行多条结构完全一样的SQL，只是参数不同
+     * 虽然PreparedStatement这种方式，可以只编译一次SQL，提高性能，
+     * 但是，对于每次SQL还是都要向MySQL发送一次网络请求
      * <p>
      * 可以通过批量执行SQL语句的功能优化这个性能
      * 一次性通过PreparedStatement发送多条SQL语句，比如100条、1000条，甚至上万条

@@ -31,8 +31,7 @@ public class MockData {
      * @param sc
      * @param sqlContext
      */
-    public static void mock(JavaSparkContext sc,
-                            SQLContext sqlContext) {
+    public static void mock(JavaSparkContext sc, SQLContext sqlContext) {
         List<Row> rows = new ArrayList<Row>();
 
         String[] searchKeywords = new String[]{"火锅", "蛋糕", "重庆辣子鸡", "重庆小面",

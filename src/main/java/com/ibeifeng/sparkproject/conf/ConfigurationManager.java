@@ -55,7 +55,7 @@ public class ConfigurationManager {
 			// 然后外界其实就可以通过Properties对象获取指定key对应的value
 			prop.load(in);  
 		} catch (Exception e) {
-			e.printStackTrace();  
+			e.printStackTrace();
 		}
 	}
 	
